@@ -1,0 +1,17 @@
+.form__item {
+  width: 100%;
+  padding: 9px 0;
+  border-top: none;
+  border-right: none;
+  border-bottom: 1px solid rgba(0 0 0 / 20%);
+  border-left: none;
+  margin: 0;
+  font-size: 14px;
+  line-height: calc(1 / 14 * 17);
+  outline-offset: 4px;
+  transition: 1s;
+}
+
+.form__item:focus {
+  border-bottom: 1px solid rgba(0 0 0 / 100%);
+}

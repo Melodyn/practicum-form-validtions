@@ -1,0 +1,25 @@
+.popup__container {
+  display: grid;
+  padding: 0 19px;
+  gap: 8px;
+  grid-template-areas:
+    '. close'
+    'content .';
+  grid-template-columns: auto min-content;
+}
+
+@media screen and (max-width: 611px) {
+  .popup__container {
+    gap: 18px;
+    grid-template-areas:
+      'close'
+      'content';
+    grid-template-columns: auto;
+  }
+}
+
+@media screen and (max-height: 450px) {
+  .popup__container {
+    gap: 8px;
+  }
+}

@@ -1,0 +1,33 @@
+.popup__close {
+  width: 32px;
+  height: 32px;
+  background-image: url('../../../images/buttons/close.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  cursor: pointer;
+  grid-area: close;
+  justify-self: end;
+  transition: .3s;
+}
+
+.popup__close:focus {
+  outline-offset: 4px;
+}
+
+.popup__close:hover {
+  opacity: .6;
+}
+
+@media screen and (max-width: 611px) {
+  .popup__close {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media screen and (max-height: 450px) {
+  .popup__close {
+    width: 20px;
+    height: 20px;
+  }
+}

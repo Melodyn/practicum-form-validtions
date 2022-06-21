@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="./pages/index.css">
+  <link href="https://praktikum.s3.yandex.net/praktikum/v1.13.11-1655484263/static/favicon.png" rel="shortcut icon"
+        type="image/x-icon">
+  <title>Never Gonna Give You Up</title>
+</head>
+<body class="page">
+  <div class="popup popup_type_place">
+    <div class="popup__container">
+      <button
+        class="button popup__close"
+        type="button"
+        tabindex="4"
+        aria-label="Закрыть">
+      </button>
+      <form
+        action="/"
+        class="form popup__content"
+        name="place"
+        tabindex="0">
+        <h2 class="form__title">Новое место</h2>
+        <fieldset class="form__items">
+          <input
+            type="text"
+            id="name"
+            name="name"
+            class="form__item"
+            placeholder="Название"
+            tabindex="1">
+          <input
+            type="text"
+            id="link"
+            name="link"
+            class="form__item"
+            placeholder="Ссылка на картинку"
+            tabindex="2">
+        </fieldset>
+        <button
+          type="submit"
+          name="submit"
+          class="button form__submit"
+          tabindex="3">Создать
+        </button>
+      </form>
+    </div>
+  </div>
+  <script src="scripts/simple.js"></script>
+</body>
+</html>

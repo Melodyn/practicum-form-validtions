@@ -1,0 +1,5 @@
+.form__item_invalid,
+.form__item_invalid:focus {
+  border-bottom: 1px solid rgba(255 0 0 / 100%);
+  outline-color: red;
+}
