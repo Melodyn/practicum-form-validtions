@@ -1,19 +1,20 @@
+const dataContainer = document.querySelector('.data-container');
+
 /* places */
 const places = [];
 const createPlace = (name, link) => ({ name, link });
-const addPlace = (place) => {
+const addPlace = (place) => { // побочные эффекты
   places.unshift(place);
-  console.clear(); // побочные эффекты
-  console.log(JSON.stringify(places, null, 1));
+  dataContainer.value = (JSON.stringify(places, null, 1));
 };
 
 /* popups */
 const openPopup = (popup) => {
-  document.removeEventListener('keydown', openPopupPlace);
+  dataContainer.removeEventListener('click', openPopupPlace);
   popup.classList.add('popup_opened');
 };
 const closePopup = (popup) => {
-  document.addEventListener('keydown', openPopupPlace);
+  dataContainer.addEventListener('click', openPopupPlace);
   popup.classList.remove('popup_opened');
 };
 
@@ -24,11 +25,7 @@ buttonClosePopupPlace.addEventListener('click', () => closePopup(popupPlace));
 /* forms */
 const formPlace = document.forms.place;
 
-const openPopupPlace = () => {
-  formPlace.name.focus();
-
-  openPopup(popupPlace);
-};
+const openPopupPlace = () => openPopup(popupPlace);
 
 const submitPlaceHandler = (e) => {
   e.preventDefault();
@@ -73,4 +70,4 @@ const submitPlaceHandler = (e) => {
 };
 
 formPlace.addEventListener('submit', submitPlaceHandler);
-document.addEventListener('keydown', openPopupPlace);
+dataContainer.addEventListener('click', openPopupPlace);

@@ -1,19 +1,20 @@
+const dataContainer = document.querySelector('.data-container');
+
 /* places */
 const places = [];
 const createPlace = (name, link) => ({ name, link });
-const addPlace = (place) => {
+const addPlace = (place) => { // побочные эффекты
   places.unshift(place);
-  console.clear(); // побочные эффекты
-  console.log(JSON.stringify(places, null, 1));
+  dataContainer.value = (JSON.stringify(places, null, 1));
 };
 
 /* popups */
 const openPopup = (popup) => {
-  document.removeEventListener('keydown', openPopupPlace);
+  dataContainer.removeEventListener('click', openPopupPlace);
   popup.classList.add('popup_opened');
 };
 const closePopup = (popup) => {
-  document.addEventListener('keydown', openPopupPlace);
+  dataContainer.addEventListener('click', openPopupPlace);
   popup.classList.remove('popup_opened');
 };
 
@@ -22,49 +23,87 @@ const buttonClosePopupPlace = popupPlace.querySelector('.popup__close');
 buttonClosePopupPlace.addEventListener('click', () => closePopup(popupPlace));
 
 /* forms */
-const formPlace = document.forms.place; // $0.validity и $0.validationMessage
-// const formPlaceNameError = formPlace.querySelector('.form__item-error_field_name');
-// const formPlaceLinkError = formPlace.querySelector('.form__item-error_field_link');
+const formPlace = document.forms.place;
 
 const openPopupPlace = () => {
   formPlace.reset();
+  formPlace.submit.setAttribute('disabled', 'disabled');
   formPlace.name.focus();
 
   openPopup(popupPlace);
 };
-const submitPlaceHandler = (e) => {
-  // formPlace.submit.setAttribute('disabled', 'disabled');
-  e.preventDefault();
 
-  const name = formPlace.name.value;
-  const link = formPlace.link.value;
+/* forms helpers */
+const focusHandler = ({ target }) => target.select();
+
+const toggleFormSubmit = (elementSubmit, { disable }) => {
+  if (disable) {
+    elementSubmit.removeAttribute('disabled');
+  } else {
+    elementSubmit.setAttribute('disabled', 'disabled');
+  }
+};
+const checkFormValidity = (elementForm, elementSubmit) => {
+  toggleFormSubmit(elementSubmit, { disable: true });
+  const fields = Array.from(elementForm.elements);
+  const formIsValid = fields.every(({ validity }) => validity.valid);
+  if (!formIsValid) {
+    toggleFormSubmit(elementSubmit, { disable: false });
+  }
+  return formIsValid;
+};
+
+const setFieldError = (elementField, elementError, params) => {
+  elementError.textContent = params.validationMessage;
+  if (params.valid) {
+    elementField.classList.remove(params.invalidFieldClass);
+  } else {
+    elementField.classList.add(params.invalidFieldClass);
+  }
+};
+const checkFieldValidity = (elementField, elementError, invalidFieldClass) => {
+  const { validationMessage, validity: { valid } } = elementField;
+  setFieldError(elementField, elementError, {
+    validationMessage,
+    valid,
+    invalidFieldClass,
+  });
+  return valid;
+};
+
+/* enable validation */
+const formPlaceFields = Array.from(formPlace.querySelectorAll('.form__item'));
+const buttonSubmitFormPlace = formPlace.querySelector('.form__submit');
+
+formPlaceFields.forEach((elementField) => {
+  const errorTextContainerSelector = `.form__item-error_field_${elementField.name}`;
+  const elementError = formPlace.querySelector(errorTextContainerSelector);
+
+  elementField.addEventListener('input', (e) => {
+    const field = e.target; // поле взято из события просто для примера, что можно и так
+    checkFormValidity(formPlace, buttonSubmitFormPlace);
+    checkFieldValidity(field, elementError, 'form__item_invalid');
+  });
+
+  elementField.addEventListener('focus', focusHandler);
+});
+
+const submitPlaceHandler = (e) => {
+  e.preventDefault();
+  const formIsValid = checkFormValidity(formPlace, buttonSubmitFormPlace);
+  if (!formIsValid) { // прервать выполнение кода ниже и остановить событие
+    e.stopImmediatePropagation();
+    return;
+  }
+
+  const name = e.target.name.value;
+  const link = e.target.link.value;
 
   closePopup(popupPlace);
 
   const place = createPlace(name, link);
   addPlace(place);
 };
-// const checkFormValidity = (elementForm) => {
-//   const fields = Array.from(elementForm.elements);
-//   const formIsValid = fields.every(({ validity }) => validity.valid);
-//   if (formIsValid) {
-//     formPlace.submit.removeAttribute('disabled');
-//   } else {
-//     formPlace.submit.setAttribute('disabled', 'disabled');
-//   }
-// };
-// const checkFieldValidity = (elementForm, elementField, elementError) => (e) => {
-//   const fieldIsValid = e.target.validity.valid;
-//   elementError.textContent = e.target.validationMessage;
-//   checkFormValidity(elementForm);
-//   if (fieldIsValid) {
-//     elementField.classList.remove('form__item_invalid');
-//   } else {
-//     elementField.classList.add('form__item_invalid');
-//   }
-// };
-//
-// formPlace.name.addEventListener('input', checkFieldValidity(formPlace, formPlace.name, formPlaceNameError));
-// formPlace.link.addEventListener('input', checkFieldValidity(formPlace, formPlace.link, formPlaceLinkError));
+
 formPlace.addEventListener('submit', submitPlaceHandler);
-document.addEventListener('keydown', openPopupPlace);
+dataContainer.addEventListener('focus', openPopupPlace);
