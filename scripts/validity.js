@@ -46,7 +46,6 @@ const toggleFormSubmit = (elementSubmit, { disable }) => {
   }
 };
 const checkFormValidity = (elementsFields, elementSubmit) => {
-  console.log(elementsFields);
   toggleFormSubmit(elementSubmit, { disable: true });
   const formIsValid = elementsFields.every(({ validity }) => validity.valid);
   if (!formIsValid) {
@@ -128,6 +127,8 @@ formPlaceFields.forEach((elementField) => {
     const formIsValid = formPlaceFields.every(({ validity }) => validity.valid);
     if (formIsValid) {
       buttonSubmitFormPlace.removeAttribute('disabled');
+    } else {
+      buttonSubmitFormPlace.setAttribute('disabled', 'disabled');
     }
   });
 });
